@@ -1,0 +1,49 @@
+import time     #Импорт библиотеки времени
+import random   #Импорт библиотеки рандом
+check = 0       #глобальная переменная для подсчета попыток
+#Декоратор для подсчета времени выполнения функция
+def times(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"Время выполнения {func.__name__}: {end_time - start_time:.6f} секунд")
+        return result
+
+    return wrapper
+#Декоратор для красивого вывода игры
+def beauty(func):
+    def wrapper(*args, **kwargs):
+        print('-' * 40)
+        result = func(*args, **kwargs)
+        print('-' * 40)
+        return result
+
+    return wrapper
+
+
+@times
+@beauty
+#Основная бесконечная функция
+def game():
+    print('Игра: УГАДАЙ ЧИСЛО')
+    first_number = int(input('Введите первое число для радиуса создания числа:'))       #Ввод первого числа для создания рандомного
+    second_number = int(input('Введите второе число для радиуса создания числа:'))      #Ввод второго числа для создания рандомного
+    random_number = random.randint(first_number, second_number)                         #Создание рандомного числа
+    while True:
+        guessinging = int(input('Введите число которое по вашему мнению загадала программа:'))      #Ввод числа, которое по мнению пользователя загадала программа
+        global check
+        if guessinging == random_number:            #Проверка угадал ли пользователь число
+            check += 1                              #Прибавление единицы для счетчика количества попыток
+            print('Ты угадал число')
+            print(f'Количество попыток:{check}')    #Вывод количества попыток
+            break
+        else:
+            check += 1                              #Прибавление единицы для счетчика количества попыток
+            print('Не повезло, ты не смог угадать попробуй снова')
+            print(f'Количество попыток:{check}')                    #Вывод количества попыток
+            break
+
+#Бесконечный запуск основной функции
+while True:
+    game()
